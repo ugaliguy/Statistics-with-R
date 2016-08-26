@@ -68,10 +68,10 @@ We could look for an association between hours slept and poor mental health. We'
 
 **Research quesion 3:**
 
-Is there a correlation between attitudes towards people with mental illness `misphlpf` and feelings of hopelessness `mishopls` and worthlessness `miswtles`?
+Is there a correlation between reported general health `genhlth` and hours of sleep `sleptim1` based on gender `sex`?
 
 
-Determining an association between the perception of people's attitudes towards mental illness and feelings of despair might suggest symptoms of a depressive disorder.
+We can examine the question of whether 7 or 8 hours of sleep per night is better for you.
 
 * * *
 
@@ -100,15 +100,17 @@ p <- ggplot(set1, aes( menthlth, X_bmi5))
 p + geom_point(shape = 19, alpha = 1/2,aes(colour = employ1)) + geom_smooth(color = "green")  + facet_grid(.~sex) + theme_bw()
 ```
 
-For both males and females there appears to be a slight negative correlation.
+For both males and females there appears to be a slight positive correlation.
 
 **Research quesion 3:**
 
 ```{r}
-set2 <- select(brfss2013, misphlpf, mishopls, miswtles, sex, genhlth, sleptim1) %>%
-   filter(misphlpf <= 9) %>% filter(mishopls <=5) %>% filter(miswtles != "NA") %>% filter(sex != "NA") %>% filter(genhlth != "NA") %>% filter(sleptim1 <= 12)
+set2 <- select(brfss2013,  sex, menthlth, genhlth, sleptim1) %>% filter(sex != "NA") %>% 
+  filter(menthlth != "NA") %>% filter(genhlth != "NA") %>% filter(sleptim1 <= 12)
 summary(set2)
-q <- ggplot(set2, aes(genhlth, mishopls))
-q + geom_jitter(alpha= 1/2,aes(fill = mishopls)) + scale_y_continuous(limits = c(4,10), breaks = 5:9) +  facet_grid(.~misphlpf) + theme(text = element_text(size=20), axis.text.x = element_text(angle=90, vjust=1)) + xlab("genhlth = Self-Reported General Health") + ylab ("sleptim1 = Number of Hours of Sleep?") + theme_bw()
+q <- ggplot(set2, aes(genhlth, sleptim1))
+q + geom_boxplot() + scale_y_continuous(limits = c(4,10), breaks = 5:9) + facet_grid(. ~ sex) + xlab("genhlth = Self reported general health") + 
+  ylab ("sleptim1 = How much time do you sleep?") + theme_bw()
 ```
 
+There appear to be no significant differences between men and women, although (self-reported) healthy women appear to need less sleep.
