@@ -61,9 +61,10 @@ This would be a preliminary data exploration to examine the question of whether 
 
 **Research quesion 2:**
 
-Is there a correlation between hours of sleep `sleptim1` and poor mental health `ssbsugar`?
-We llok at this by employment status 'employ1'.
+Is there a correlation between hours of sleep `sleptim1` and poor mental health `menthlth`?
+We look at this by employment status `employ1`.
 
+We could look for an association between hours slept and poor mental health. We'll look for patterns based on employment status.
 
 **Research quesion 3:**
 
@@ -81,8 +82,8 @@ Determining an association between the perception of people's attitudes towards 
 **Research quesion 1:**
 
 ```{r}
-set1 <- select(brfss2013, menthlth, physhlth, sleptim1, numadult, nummen, numwomen, employ1, sex) %>%
-   filter(menthlth != "NA") %>% filter(physhlth != "NA") %>% filter(sleptim1 != "NA") %>% filter(numadult != "NA") %>% filter(nummen != "NA") %>% filter(numwomen != "NA") %>% filter(employ1 != "NA") %>% filter(sex != "NA")
+set1 <- select(brfss2013, menthlth, physhlth, sleptim1, X_bmi5, nummen, numwomen, employ1, sex) %>%
+   filter(menthlth != "NA") %>% filter(physhlth != "NA") %>% filter(sleptim1 != "NA") %>% filter(X_bmi5 != "NA") %>% filter(nummen != "NA") %>% filter(numwomen != "NA") %>% filter(employ1 != "NA") %>% filter(sex != "NA")
 summary(set1)
 
 g <- ggplot(set1, aes(physhlth, menthlth))
@@ -95,15 +96,19 @@ It's interesting to note that the shapes of the smoothing curves are very simila
 **Research quesion 2:**
 
 ```{r}
-p <- ggplot(set1, aes( menthlth, sleptim1))
+p <- ggplot(set1, aes( menthlth, X_bmi5))
 p + geom_point(shape = 19, alpha = 1/2,aes(colour = employ1)) + geom_smooth(color = "green")  + facet_grid(.~sex) + theme_bw()
 ```
 
-
+For both males and females there appears to be a slight negative correlation.
 
 **Research quesion 3:**
 
 ```{r}
-
+set2 <- select(brfss2013, misphlpf, mishopls, miswtles, sex, genhlth, sleptim1) %>%
+   filter(misphlpf <= 9) %>% filter(mishopls <=5) %>% filter(miswtles != "NA") %>% filter(sex != "NA") %>% filter(genhlth != "NA") %>% filter(sleptim1 <= 12)
+summary(set2)
+q <- ggplot(set2, aes(genhlth, mishopls))
+q + geom_jitter(alpha= 1/2,aes(fill = mishopls)) + scale_y_continuous(limits = c(4,10), breaks = 5:9) +  facet_grid(.~misphlpf) + theme(text = element_text(size=20), axis.text.x = element_text(angle=90, vjust=1)) + xlab("genhlth = Self-Reported General Health") + ylab ("sleptim1 = Number of Hours of Sleep?") + theme_bw()
 ```
 
