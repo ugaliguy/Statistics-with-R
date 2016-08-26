@@ -100,7 +100,7 @@ p <- ggplot(set1, aes( menthlth, X_bmi5))
 p + geom_point(shape = 19, alpha = 1/2,aes(colour = employ1)) + geom_smooth(color = "green")  + facet_grid(.~sex) + theme_bw()
 ```
 
-For both males and females there appears to be a slight negative correlation.
+For both males and females there appears to be a slight positive correlation.
 
 **Research quesion 3:**
 
@@ -109,7 +109,7 @@ set2 <- select(brfss2013,  sex, menthlth, genhlth, sleptim1) %>% filter(sex != "
   filter(menthlth != "NA") %>% filter(genhlth != "NA") %>% filter(sleptim1 <= 12)
 summary(set2)
 q <- ggplot(set2, aes(genhlth, sleptim1))
-q + geom_violin() + scale_y_continuous(limits = c(4,10), breaks = 5:9) + facet_grid(. ~ sex) + xlab("genhlth = Self reported general health") + 
+q + geom_boxplot() + scale_y_continuous(limits = c(4,10), breaks = 5:9) + facet_grid(. ~ sex) + xlab("genhlth = Self reported general health") + 
   ylab ("sleptim1 = How much time do you sleep?") + theme_bw()
 ```
 
